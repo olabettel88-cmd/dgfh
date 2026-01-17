@@ -24,7 +24,7 @@ const PRODUCTS = [
     price: 0.1,
     category: "Mumuso",
     image: "/products/parapluie.png",
-    colors: ["Black"],
+    colors: ["Gray", "Burgundy"],
     isGift: true
   },
   {
@@ -74,7 +74,7 @@ const COLOR_MAP: Record<string, string> = {
   // Jeans
   "Black": "/products/black-jeans.png",
   // Parapluie
-  "Parapluie-Black": "/products/parapluie.png",
+  "Parapluie-Black": "/products/black-parapluie.png",
   "Parapluie-Burgundy": "/products/burgundy-parapluie.png",
   "Parapluie-Gray": "/products/gray-parapluie.png",
 };
@@ -83,7 +83,7 @@ export default function GiftStore() {
   // State
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([1]);
   const [selectedColors, setSelectedColors] = useState<Record<number, string>>({
-    1: "Black",
+    1: "Gray",
     2: "Gray",
     3: "Light Gray",
     4: "Black",
