@@ -1,0 +1,483 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  image2?: string;
+  description: string;
+  category: string;
+  isGift?: boolean;
+}
+
+const products: Product[] = [
+  {
+    id: 1,
+    name: "Cardigan Boutons",
+    price: 399,
+    image: "https://ext.same-assets.com/635431884/2314346430.jpeg",
+    image2: "https://ext.same-assets.com/635431884/2045305.jpeg",
+    description: "Cardigan en maille avec fermeture à boutons - Collection Pacific Republic",
+    category: "Pull&Bear",
+  },
+  {
+    id: 2,
+    name: "Parapluie Automatique",
+    price: 99.9,
+    image: "https://ext.same-assets.com/1434329605/1185150300.jpeg",
+    image2: "https://ext.same-assets.com/1434329605/3999547620.jpeg",
+    description: "Parapluie élégant à ouverture automatique - Un cadeau spécial pour toi",
+    category: "Mumuso",
+    isGift: true,
+  },
+];
+
+const FloatingHearts = () => {
+  const [hearts, setHearts] = useState<Array<{ id: number; left: number; delay: number; size: number }>>([]);
+
+  useEffect(() => {
+    const newHearts = Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 15,
+      size: Math.random() * 16 + 12,
+    }));
+    setHearts(newHearts);
+  }, []);
+
+  return (
+    <div className="floating-hearts">
+      {hearts.map((heart) => (
+        <span
+          key={heart.id}
+          className="heart"
+          style={{
+            left: `${heart.left}%`,
+            animationDelay: `${heart.delay}s`,
+            fontSize: `${heart.size}px`,
+          }}
+        >
+          &#10084;
+        </span>
+      ))}
+    </div>
+  );
+};
+
+const CuteCat = () => {
+  return (
+    <div className="fixed bottom-4 right-4 z-50 animate-bounce-gentle cursor-pointer group">
+      <div className="relative">
+        <img
+          src="https://i.pinimg.com/originals/cf/94/20/cf94204d9c184ff030c707026ce3deb4.gif"
+          alt="Cute cat"
+          className="w-24 h-24 object-contain drop-shadow-lg group-hover:scale-110 transition-transform"
+        />
+        <div className="absolute -top-12 -left-16 bg-white rounded-2xl px-3 py-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+          <span className="text-sm text-pink-500 font-medium whitespace-nowrap">Je t aime!</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function GiftStore() {
+  const [selectedProducts, setSelectedProducts] = useState<number[]>([2]); // Umbrella pre-selected as gift
+  const [step, setStep] = useState<"browse" | "checkout" | "success">("browse");
+  const [formData, setFormData] = useState({
+    address: "",
+    phone: "",
+    note: "",
+  });
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [modalImages, setModalImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const toggleProduct = (productId: number) => {
+    const product = products.find((p) => p.id === productId);
+    if (product?.isGift) return; // Can't remove the gift!
+
+    setSelectedProducts((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const getTotal = () => {
+    return selectedProducts.reduce((total, id) => {
+      const product = products.find((p) => p.id === id);
+      return total + (product?.price || 0);
+    }, 0);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.address && formData.phone) {
+      setStep("success");
+    }
+  };
+
+  const openImageModal = (images: string[]) => {
+    setModalImages(images);
+    setCurrentImageIndex(0);
+    setShowImageModal(true);
+  };
+
+  return (
+    <div className="min-h-screen cute-gradient relative">
+      <FloatingHearts />
+      <CuteCat />
+
+      {/* Header */}
+      <header className="relative z-10 py-8 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="text-3xl animate-heartbeat">&#10084;</span>
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-rose-500 bg-clip-text text-transparent">
+              Pour Toi Mon Amour
+            </h1>
+            <span className="text-3xl animate-heartbeat">&#10084;</span>
+          </div>
+          <p className="text-pink-600/80 text-lg mt-4 max-w-md mx-auto">
+            Choisis ce qui te fait plaisir, mon coeur. Tout est pour toi!
+          </p>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="relative z-10 px-4 pb-24">
+        <div className="max-w-4xl mx-auto">
+
+          {step === "browse" && (
+            <>
+              {/* Gift notice */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 mb-8 border border-pink-200 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl animate-wiggle">&#127873;</span>
+                  <div>
+                    <p className="font-medium text-pink-700">Surprise!</p>
+                    <p className="text-sm text-pink-600/80">
+                      Le parapluie est déjà dans ton panier - un petit cadeau de ma part!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Products Grid */}
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {products.map((product, index) => (
+                  <Card
+                    key={product.id}
+                    className={`product-card overflow-hidden border-2 cursor-pointer ${
+                      selectedProducts.includes(product.id)
+                        ? "border-pink-400 shadow-lg shadow-pink-200/50"
+                        : "border-pink-100"
+                    }`}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="relative">
+                      <div
+                        className="aspect-square overflow-hidden bg-gradient-to-br from-pink-50 to-white cursor-zoom-in"
+                        onClick={() => openImageModal([product.image, product.image2 || product.image])}
+                      >
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+
+                      {product.isGift && (
+                        <div className="absolute top-3 left-3">
+                          <Badge className="bg-gradient-to-r from-pink-500 to-rose-500 text-white border-0 animate-sparkle">
+                            &#127873; Cadeau
+                          </Badge>
+                        </div>
+                      )}
+
+                      {selectedProducts.includes(product.id) && (
+                        <div className="absolute top-3 right-3">
+                          <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white shadow-lg">
+                            &#10003;
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <CardContent className="p-5">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <Badge variant="secondary" className="mb-2 text-xs">
+                            {product.category}
+                          </Badge>
+                          <h3 className="font-semibold text-lg text-gray-800">
+                            {product.name}
+                          </h3>
+                        </div>
+                        <span className="text-xl font-bold text-pink-500">
+                          {product.price} MAD
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-gray-600 mb-4">
+                        {product.description}
+                      </p>
+
+                      <Button
+                        onClick={() => toggleProduct(product.id)}
+                        className={`w-full rounded-full transition-all ${
+                          product.isGift
+                            ? "bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 cursor-default"
+                            : selectedProducts.includes(product.id)
+                            ? "bg-pink-500 hover:bg-pink-600"
+                            : "bg-gray-100 text-gray-700 hover:bg-pink-100"
+                        }`}
+                        disabled={product.isGift}
+                      >
+                        {product.isGift
+                          ? "&#10084; Cadeau pour toi!"
+                          : selectedProducts.includes(product.id)
+                          ? "&#10003; Sélectionné"
+                          : "Ajouter au panier"}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Cart Summary */}
+              {selectedProducts.length > 0 && (
+                <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-pink-200 p-4 shadow-2xl z-40">
+                  <div className="max-w-4xl mx-auto flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        {selectedProducts.length} article{selectedProducts.length > 1 ? "s" : ""} sélectionné{selectedProducts.length > 1 ? "s" : ""}
+                      </p>
+                      <p className="text-2xl font-bold text-pink-500">
+                        {getTotal().toFixed(2)} MAD
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => setStep("checkout")}
+                      className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-8 py-6 rounded-full text-lg shadow-lg shadow-pink-300/50"
+                    >
+                      Valider ma commande &#10084;
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {step === "checkout" && (
+            <div className="max-w-lg mx-auto animate-fade-in-up">
+              <Card className="border-2 border-pink-200 shadow-xl">
+                <CardContent className="p-8">
+                  <div className="text-center mb-8">
+                    <span className="text-5xl mb-4 block animate-bounce-gentle">&#128230;</span>
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      Où livrer tes cadeaux?
+                    </h2>
+                    <p className="text-pink-600/80 mt-2">
+                      Remplis les informations ci-dessous
+                    </p>
+                  </div>
+
+                  {/* Order Summary */}
+                  <div className="bg-pink-50 rounded-2xl p-4 mb-6">
+                    <h3 className="font-medium text-gray-700 mb-3">Ta commande:</h3>
+                    {selectedProducts.map((id) => {
+                      const product = products.find((p) => p.id === id);
+                      return product ? (
+                        <div key={id} className="flex items-center gap-3 mb-2">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{product.name}</p>
+                            <p className="text-xs text-gray-500">{product.category}</p>
+                          </div>
+                          <span className="font-semibold text-pink-500">
+                            {product.price} MAD
+                          </span>
+                        </div>
+                      ) : null;
+                    })}
+                    <div className="border-t border-pink-200 mt-3 pt-3 flex justify-between">
+                      <span className="font-bold">Total</span>
+                      <span className="font-bold text-pink-500">{getTotal().toFixed(2)} MAD</span>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Adresse de livraison *
+                      </label>
+                      <Textarea
+                        value={formData.address}
+                        onChange={(e) =>
+                          setFormData({ ...formData, address: e.target.value })
+                        }
+                        placeholder="Ton adresse complète..."
+                        className="rounded-xl border-pink-200 focus:border-pink-400 focus:ring-pink-400"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Téléphone (pour recevoir la commande) *
+                      </label>
+                      <Input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) =>
+                          setFormData({ ...formData, phone: e.target.value })
+                        }
+                        placeholder="+212 6XX XXX XXX"
+                        className="rounded-xl border-pink-200 focus:border-pink-400 focus:ring-pink-400"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Note (optionnel)
+                      </label>
+                      <Textarea
+                        value={formData.note}
+                        onChange={(e) =>
+                          setFormData({ ...formData, note: e.target.value })
+                        }
+                        placeholder="Un message spécial..."
+                        className="rounded-xl border-pink-200 focus:border-pink-400 focus:ring-pink-400"
+                      />
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setStep("browse")}
+                        className="flex-1 rounded-full border-pink-200"
+                      >
+                        Retour
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 rounded-full shadow-lg"
+                      >
+                        Confirmer &#10084;
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {step === "success" && (
+            <div className="max-w-lg mx-auto text-center animate-fade-in-up">
+              <Card className="border-2 border-pink-200 shadow-xl overflow-hidden">
+                <div className="bg-gradient-to-br from-pink-400 to-rose-500 p-8">
+                  <span className="text-8xl block mb-4 animate-bounce-gentle">&#127881;</span>
+                  <h2 className="text-3xl font-bold text-white mb-2">
+                    Merci mon amour!
+                  </h2>
+                  <p className="text-pink-100">
+                    Ta commande a été envoyée avec succès
+                  </p>
+                </div>
+                <CardContent className="p-8">
+                  <div className="space-y-4 text-left bg-pink-50 rounded-2xl p-5 mb-6">
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wide">Livraison à</p>
+                      <p className="font-medium">{formData.address}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wide">Téléphone</p>
+                      <p className="font-medium">{formData.phone}</p>
+                    </div>
+                    {formData.note && (
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase tracking-wide">Note</p>
+                        <p className="font-medium italic">&ldquo;{formData.note}&rdquo;</p>
+                      </div>
+                    )}
+                    <div className="border-t border-pink-200 pt-4">
+                      <p className="text-xs text-gray-500 uppercase tracking-wide">Total</p>
+                      <p className="text-2xl font-bold text-pink-500">{getTotal().toFixed(2)} MAD</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-center gap-2 text-pink-600">
+                    <span className="animate-heartbeat">&#10084;</span>
+                    <span className="font-medium">Je t aime tellement!</span>
+                    <span className="animate-heartbeat">&#10084;</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Image Modal */}
+      <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden border-pink-200">
+          <DialogHeader className="p-4 border-b border-pink-100">
+            <DialogTitle className="text-pink-700">Photos du produit</DialogTitle>
+            <DialogDescription className="text-pink-500/80">
+              Clique sur les images pour voir en détail
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-4">
+            <div className="aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-pink-50 to-white">
+              <img
+                src={modalImages[currentImageIndex]}
+                alt="Product"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            {modalImages.length > 1 && (
+              <div className="flex gap-2 mt-4 justify-center">
+                {modalImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                      currentImageIndex === idx
+                        ? "border-pink-500 shadow-lg"
+                        : "border-pink-200 opacity-60"
+                    }`}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
