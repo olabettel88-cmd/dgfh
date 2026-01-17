@@ -1,31 +1,21 @@
-import {
-  orders,
-  type InsertOrder,
-  type Order
-} from "@shared/schema";
+import { orders, type Order, type InsertOrder } from "@shared/schema";
+import { db } from "./db";
+import { desc } from "drizzle-orm";
 
 export interface IStorage {
   createOrder(order: InsertOrder): Promise<Order>;
   getOrders(): Promise<Order[]>;
 }
 
-export class MemoryStorage implements IStorage {
-  private orders: Order[] = [];
-  private currentId: number = 1;
-
+export class DatabaseStorage implements IStorage {
   async createOrder(insertOrder: InsertOrder): Promise<Order> {
-    const order: Order = {
-      ...insertOrder,
-      id: this.currentId++,
-      createdAt: new Date(),
-    };
-    this.orders.push(order);
+    const [order] = await db.insert(orders).values(insertOrder).returning();
     return order;
   }
 
   async getOrders(): Promise<Order[]> {
-    return this.orders.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
+    return await db.select().from(orders).orderBy(desc(orders.createdAt));
   }
 }
 
-export const storage = new MemoryStorage();
+export const storage = new DatabaseStorage();
