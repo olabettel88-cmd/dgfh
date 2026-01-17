@@ -145,7 +145,7 @@ export default function GiftStore() {
   const triggerConfetti = () => {
     const duration = 5 * 1000;
     const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999, shapes: ['circle'] };
 
     const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
