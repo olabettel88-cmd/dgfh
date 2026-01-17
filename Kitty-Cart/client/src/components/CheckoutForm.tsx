@@ -46,13 +46,15 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
   }, [digits, form]);
 
   const handleDigitChange = (index: number, value: string) => {
+    // Take only the last character entered
     const char = value.slice(-1).replace(/[^0-9]/g, "");
     
     const newDigits = [...digits];
     newDigits[index] = char;
     setDigits(newDigits);
 
-    if (char && index < 8) {
+    // If a digit was entered, move to the next field
+    if (char !== "" && index < 8) {
       setTimeout(() => {
         inputRefs.current[index + 1]?.focus();
       }, 0);
@@ -62,8 +64,13 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace") {
       if (!digits[index] && index > 0) {
+        // If current field is empty, move back and clear previous
         inputRefs.current[index - 1]?.focus();
+        const newDigits = [...digits];
+        newDigits[index - 1] = "";
+        setDigits(newDigits);
       } else {
+        // Clear current field
         const newDigits = [...digits];
         newDigits[index] = "";
         setDigits(newDigits);
@@ -110,27 +117,28 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
             )}
           />
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <FormLabel className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 font-sans">
               Phone Number
             </FormLabel>
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className="h-12 px-4 flex items-center justify-center bg-gray-50 rounded-[14px] text-sm font-bold text-gray-900 border border-gray-100">
+            <div className="flex items-center gap-2">
+              <div className="h-12 px-3 md:px-4 flex items-center justify-center bg-gray-50 rounded-[16px] text-xs md:text-sm font-bold text-gray-900 border border-gray-100 shadow-sm">
                 +212
               </div>
-              <div className="flex gap-1.5 flex-wrap">
+              <div className="flex gap-1 md:gap-1.5 flex-wrap">
                 {digits.map((digit, i) => (
                   <input
                     key={i}
                     ref={(el) => (inputRefs.current[i] = el)}
                     type="text"
                     inputMode="numeric"
+                    pattern="[0-9]*"
                     maxLength={1}
                     value={digit}
                     onPaste={handlePaste}
                     onChange={(e) => handleDigitChange(i, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(i, e)}
-                    className="w-8 h-12 md:w-9 md:h-12 bg-gray-50/50 rounded-[12px] border-none text-center font-bold text-gray-900 focus:bg-white focus:ring-1 focus:ring-gray-200 transition-all outline-none text-sm border border-gray-100"
+                    className="w-8 h-12 md:w-9 md:h-12 bg-gray-50/50 rounded-[14px] border border-gray-100 text-center font-bold text-gray-900 focus:bg-white focus:ring-2 focus:ring-gray-900/5 transition-all outline-none text-sm shadow-sm"
                   />
                 ))}
               </div>
