@@ -101,7 +101,7 @@ export default function GiftStore() {
 
   // Handlers
   const toggleProduct = (productId: number) => {
-    if (productId === 1) return; // Parapluie Noir is locked
+    if (productId === 1) return; // Parapluie is locked
     setSelectedProductIds(prev => 
       prev.includes(productId) 
         ? prev.filter(id => id !== productId)
@@ -170,9 +170,9 @@ export default function GiftStore() {
 
   return (
     <div className="min-h-screen pb-24 overflow-x-hidden font-display bg-[#fafafa]">
-      
-      {/* Header */}
-      <header className="pt-20 pb-12 px-4 text-center relative z-10">
+          <FloatingHearts />
+          {/* Header */}
+          <header className="pt-20 pb-12 px-4 text-center relative z-10">
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
