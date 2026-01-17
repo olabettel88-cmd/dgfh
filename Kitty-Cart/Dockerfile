@@ -15,8 +15,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy everything from builder (includes any drizzle files)
-COPY --from=builder /app .
+# Copy built files and source (for drizzle schema)
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server ./server
 
 EXPOSE 5000
 ENV NODE_ENV=production
