@@ -14,8 +14,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Expose port (Railway will set PORT env variable)
+# Expose port
 EXPOSE 5000
 
-# Start the production server
+# Use npm start instead of running node directly
 CMD ["npm", "start"]
