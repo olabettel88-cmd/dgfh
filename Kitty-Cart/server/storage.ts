@@ -1,4 +1,3 @@
-import { db } from "./db";
 import {
   orders,
   type InsertOrder,
@@ -10,15 +9,23 @@ export interface IStorage {
   getOrders(): Promise<Order[]>;
 }
 
-export class DatabaseStorage implements IStorage {
+export class MemoryStorage implements IStorage {
+  private orders: Order[] = [];
+  private currentId: number = 1;
+
   async createOrder(insertOrder: InsertOrder): Promise<Order> {
-    const [order] = await db.insert(orders).values(insertOrder).returning();
+    const order: Order = {
+      ...insertOrder,
+      id: this.currentId++,
+      createdAt: new Date(),
+    };
+    this.orders.push(order);
     return order;
   }
 
   async getOrders(): Promise<Order[]> {
-    return await db.select().from(orders).orderBy(orders.createdAt);
+    return this.orders.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new MemoryStorage();

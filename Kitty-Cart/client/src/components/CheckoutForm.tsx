@@ -14,12 +14,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Sparkles, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
 
 // Schema for the form fields only (excluding items/total which come from cart)
 const checkoutFormSchema = z.object({
   address: z.string().min(5, "Address is required"),
-  phone: z.string().length(9, "Exactly 9 digits required"),
+  phone: z.string().min(9, "Phone number too short"),
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
@@ -30,9 +29,6 @@ interface CheckoutFormProps {
 }
 
 export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
-  const [digits, setDigits] = useState<string[]>(Array(9).fill(""));
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
@@ -40,55 +36,6 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
       phone: "",
     },
   });
-
-  useEffect(() => {
-    form.setValue("phone", digits.join(""), { shouldValidate: true });
-  }, [digits, form]);
-
-  const handleDigitChange = (index: number, value: string) => {
-    // Take only the last character entered
-    const char = value.slice(-1).replace(/[^0-9]/g, "");
-    
-    const newDigits = [...digits];
-    newDigits[index] = char;
-    setDigits(newDigits);
-
-    // If a digit was entered, move to the next field
-    if (char !== "" && index < 8) {
-      setTimeout(() => {
-        inputRefs.current[index + 1]?.focus();
-      }, 0);
-    }
-  };
-
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace") {
-      if (!digits[index] && index > 0) {
-        // If current field is empty, move back and clear previous
-        inputRefs.current[index - 1]?.focus();
-        const newDigits = [...digits];
-        newDigits[index - 1] = "";
-        setDigits(newDigits);
-      } else {
-        // Clear current field
-        const newDigits = [...digits];
-        newDigits[index] = "";
-        setDigits(newDigits);
-      }
-    }
-  };
-
-  const handlePaste = (e: React.ClipboardEvent) => {
-    e.preventDefault();
-    const pastedData = e.clipboardData.getData("text").replace(/[^0-9]/g, "").slice(0, 9);
-    const newDigits = [...digits];
-    pastedData.split("").forEach((char, i) => {
-      if (i < 9) newDigits[i] = char;
-    });
-    setDigits(newDigits);
-    const lastIdx = Math.min(pastedData.length, 8);
-    inputRefs.current[lastIdx]?.focus();
-  };
 
   return (
     <Form {...form}>
@@ -117,38 +64,35 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
             )}
           />
 
-          <div className="space-y-4">
-            <FormLabel className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 font-sans">
-              Phone Number
-            </FormLabel>
-            <div className="flex items-center gap-2">
-              <div className="h-12 px-3 md:px-4 flex items-center justify-center bg-gray-50 rounded-[16px] text-xs md:text-sm font-bold text-gray-900 border border-gray-100 shadow-sm">
-                +212
-              </div>
-              <div className="flex gap-1 md:gap-1.5 flex-wrap">
-                {digits.map((digit, i) => (
-                  <input
-                    key={i}
-                    ref={(el) => (inputRefs.current[i] = el)}
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={1}
-                    value={digit}
-                    onPaste={handlePaste}
-                    onChange={(e) => handleDigitChange(i, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(i, e)}
-                    className="w-8 h-12 md:w-9 md:h-12 bg-gray-50/50 rounded-[14px] border border-gray-100 text-center font-bold text-gray-900 focus:bg-white focus:ring-2 focus:ring-gray-900/5 transition-all outline-none text-sm shadow-sm"
-                  />
-                ))}
-              </div>
-            </div>
-            {form.formState.errors.phone && (
-              <p className="text-[10px] text-red-400 font-sans font-medium px-2">
-                {form.formState.errors.phone.message}
-              </p>
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 font-sans">
+                  Phone Number
+                </FormLabel>
+                <FormControl>
+                  <div className="flex items-center gap-2">
+                    <div className="h-14 px-4 flex items-center justify-center bg-gray-50 rounded-[20px] text-sm font-bold text-gray-900 border border-gray-100 shadow-sm">
+                      +212
+                    </div>
+                    <div className="relative group flex-1">
+                      <Input 
+                        type="tel"
+                        inputMode="tel"
+                        placeholder="6 00 00 00 00"
+                        className="h-14 rounded-[20px] border-none bg-gray-50/50 px-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white font-sans font-bold tracking-widest"
+                        {...field}
+                      />
+                      <div className="absolute inset-0 rounded-[20px] ring-1 ring-inset ring-gray-100 group-focus-within:ring-gray-200 pointer-events-none transition-all" />
+                    </div>
+                  </div>
+                </FormControl>
+                <FormMessage className="text-[10px] text-red-400 font-sans font-medium px-2" />
+              </FormItem>
             )}
-          </div>
+          />
         </div>
 
         <motion.div
