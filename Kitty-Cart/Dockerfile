@@ -17,7 +17,12 @@ RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
+# Copy drizzle files for migrations
+COPY drizzle ./drizzle
+COPY drizzle.config.ts ./
+
 EXPOSE 5000
 ENV NODE_ENV=production
 
-CMD ["node", "dist/index.cjs"]
+# Run migrations then start server
+CMD npm run db:push && node dist/index.cjs
