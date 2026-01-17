@@ -112,11 +112,17 @@ export default function GiftStore() {
   // Handlers
   const toggleProduct = (productId: number) => {
     if (productId === 1) return; // Parapluie is locked
-    setSelectedProductIds(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    );
+    
+    setSelectedProductIds(prev => {
+      // If product is already selected, remove it
+      if (prev.includes(productId)) {
+        return prev.filter(id => id !== productId);
+      }
+      
+      // If we already have a second item (not Parapluie), replace it
+      // prev contains at least [1]
+      return [1, productId];
+    });
   };
 
   const handleCheckout = (formData: { address: string; phone: string }) => {
