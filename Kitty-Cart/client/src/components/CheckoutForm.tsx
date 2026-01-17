@@ -46,22 +46,44 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
   }, [digits, form]);
 
   const handleDigitChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return;
+    const cleanValue = value.replace(/[^0-9]/g, "");
+    if (cleanValue === "") {
+      const newDigits = [...digits];
+      newDigits[index] = "";
+      setDigits(newDigits);
+      return;
+    }
     
-    const newDigit = value.slice(-1);
+    const char = cleanValue.charAt(cleanValue.length - 1);
     const newDigits = [...digits];
-    newDigits[index] = newDigit;
+    newDigits[index] = char;
     setDigits(newDigits);
 
-    if (newDigit && index < 8) {
-      inputRefs.current[index + 1]?.focus();
+    if (index < 8) {
+      setTimeout(() => {
+        inputRefs.current[index + 1]?.focus();
+      }, 10);
     }
   };
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !digits[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+    if (e.key === "Backspace") {
+      if (!digits[index] && index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
     }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").replace(/[^0-9]/g, "").slice(0, 9);
+    const newDigits = [...digits];
+    pastedData.split("").forEach((char, i) => {
+      if (i < 9) newDigits[i] = char;
+    });
+    setDigits(newDigits);
+    const lastIdx = Math.min(pastedData.length, 8);
+    inputRefs.current[lastIdx]?.focus();
   };
 
   return (
@@ -108,6 +130,7 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
                     inputMode="numeric"
                     maxLength={1}
                     value={digit}
+                    onPaste={handlePaste}
                     onChange={(e) => handleDigitChange(i, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(i, e)}
                     className="w-8 h-12 md:w-9 md:h-12 bg-gray-50/50 rounded-[12px] border-none text-center font-bold text-gray-900 focus:bg-white focus:ring-1 focus:ring-gray-200 transition-all outline-none text-sm border border-gray-100"

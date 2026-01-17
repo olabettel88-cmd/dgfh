@@ -56,6 +56,16 @@
   .animate-shimmer {
     @apply animate-[shimmer_2s_infinite_linear];
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-1.5;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-100 rounded-full;
+  }
 }
 
 @keyframes wiggle {

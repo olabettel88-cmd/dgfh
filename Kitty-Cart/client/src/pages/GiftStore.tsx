@@ -246,15 +246,15 @@ export default function GiftStore() {
 
       {/* Checkout Modal */}
       <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
-        <DialogContent className="sm:max-w-md bg-white border-gray-100 p-0 overflow-hidden">
-          <div className="bg-gray-50 p-8 text-center border-b border-gray-100">
-            <DialogTitle className="text-2xl font-display text-gray-900">Delivery Details</DialogTitle>
-            <DialogDescription className="text-gray-400 mt-2">
+        <DialogContent className="w-[95%] sm:max-w-md bg-white border-gray-100 p-0 overflow-hidden max-h-[85vh] flex flex-col rounded-[2rem]">
+          <div className="bg-gray-50 p-5 md:p-8 text-center border-b border-gray-100 shrink-0">
+            <DialogTitle className="text-xl md:text-2xl font-display text-gray-900">Delivery Details</DialogTitle>
+            <DialogDescription className="text-gray-400 mt-2 text-xs md:text-sm px-4">
               Enter your information below to complete the selection.
             </DialogDescription>
           </div>
           
-          <div className="p-8">
+          <div className="p-5 md:p-8 overflow-y-auto custom-scrollbar flex-1">
             <CheckoutForm onSubmit={handleCheckout} isPending={isPending} />
           </div>
         </DialogContent>
