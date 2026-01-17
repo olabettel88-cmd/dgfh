@@ -223,20 +223,20 @@ export default function GiftStore() {
         className="fixed bottom-0 left-0 w-full p-4 z-40 pointer-events-none"
       >
         <div className="max-w-2xl mx-auto pointer-events-auto">
-          <div className="glass-panel rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div className="glass-panel rounded-2xl p-4 flex items-center justify-between gap-3 md:gap-4">
             <div className="flex flex-col pl-2">
-              <span className="text-xs text-gray-500 font-bold uppercase tracking-wider">Total</span>
-              <span className="text-2xl font-display font-bold text-gray-900">
+              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Total</span>
+              <span className="text-xl md:text-2xl font-display font-bold text-gray-900 whitespace-nowrap">
                 {calculateTotal().toFixed(2)} DH
               </span>
             </div>
             
             <button
               onClick={() => setIsCheckoutOpen(true)}
-              className="flex-1 bg-gray-900 text-white font-bold py-3 px-6 rounded-xl shadow-xl hover:bg-black hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 group"
+              className="flex-1 max-w-[180px] md:max-w-none bg-gray-900 text-white font-bold py-2.5 md:py-3 px-4 md:px-6 rounded-xl shadow-xl hover:bg-black hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 group text-sm md:text-base"
             >
-              <ShoppingBag className="w-5 h-5 group-hover:animate-wiggle" />
-              <span>Confirm Order</span>
+              <ShoppingBag className="w-4 h-4 md:w-5 h-5 group-hover:animate-wiggle" />
+              <span>Confirm</span>
             </button>
           </div>
         </div>

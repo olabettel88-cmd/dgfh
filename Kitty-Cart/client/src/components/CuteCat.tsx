@@ -6,7 +6,7 @@ export function CuteCat() {
 
   return (
     <div 
-      className="fixed bottom-0 right-4 z-50 pointer-events-auto"
+      className="fixed bottom-0 -right-2 z-50 pointer-events-auto"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

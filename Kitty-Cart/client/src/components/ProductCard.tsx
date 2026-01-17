@@ -68,13 +68,13 @@ export function ProductCard({ product, isSelected, onToggle, selectedColor, onCo
         
         {/* Color Selection */}
         {product.colors && product.colors.length > 1 && (
-          <div className="flex justify-center gap-2 mb-4">
+          <div className="flex flex-wrap justify-center gap-1.5 mb-4">
             {product.colors.map(color => (
               <button
                 key={color}
                 onClick={() => onColorChange?.(color)}
                 className={cn(
-                  "px-3 py-1 text-[10px] uppercase tracking-wider rounded-full border transition-all",
+                  "px-2 py-1 text-[9px] uppercase tracking-wider rounded-full border transition-all whitespace-nowrap",
                   selectedColor === color 
                     ? "bg-gray-900 text-white border-gray-900" 
                     : "bg-white text-gray-400 border-gray-100 hover:border-gray-300"
