@@ -18,7 +18,7 @@ import { motion } from "framer-motion";
 // Schema for the form fields only (excluding items/total which come from cart)
 const checkoutFormSchema = z.object({
   address: z.string().min(5, "Address is required"),
-  phone: z.string().min(9, "Phone number too short"),
+  phone: z.string().length(10, "Phone number must be exactly 10 digits"),
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
@@ -73,7 +73,7 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
                   Phone Number
                 </FormLabel>
                 <FormControl>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <div className="h-12 px-4 flex items-center justify-center bg-gray-50 rounded-[20px] text-xs font-bold text-gray-900 border border-gray-100 shadow-sm">
                       +212
                     </div>
@@ -81,9 +81,14 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
                       <Input 
                         type="tel"
                         inputMode="tel"
-                        placeholder="6 00 00 00 00"
-                        className="h-12 rounded-[20px] border-none bg-gray-50/50 px-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white font-sans font-bold tracking-widest"
+                        placeholder="06 00 00 00 00"
+                        maxLength={10}
+                        className="h-12 rounded-[20px] border-none bg-gray-50/50 px-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white font-sans font-bold tracking-[0.3em]"
                         {...field}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
+                          field.onChange(val);
+                        }}
                       />
                       <div className="absolute inset-0 rounded-[20px] ring-1 ring-inset ring-gray-100 group-focus-within:ring-gray-200 pointer-events-none transition-all" />
                     </div>
