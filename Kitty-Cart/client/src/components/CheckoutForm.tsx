@@ -41,22 +41,29 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="space-y-6">
           <FormField
             control={form.control}
             name="address"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-900 font-bold uppercase tracking-wider text-[10px]">Delivery Address</FormLabel>
+              <FormItem className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <FormLabel className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 font-sans">
+                    Delivery Address
+                  </FormLabel>
+                </div>
                 <FormControl>
-                  <Textarea 
-                    placeholder="Where should we send these? 🏠" 
-                    className="min-h-[80px] rounded-2xl border-gray-100 focus:border-gray-900 focus:ring-gray-100 bg-[#fafafa]/50 font-display"
-                    {...field} 
-                  />
+                  <div className="relative group">
+                    <Textarea 
+                      placeholder="Street, City, Zip..." 
+                      className="min-h-[100px] rounded-[24px] border-none bg-gray-50/50 p-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white resize-none font-sans"
+                      {...field} 
+                    />
+                    <div className="absolute inset-0 rounded-[24px] ring-1 ring-inset ring-gray-100 group-focus-within:ring-gray-200 pointer-events-none transition-all" />
+                  </div>
                 </FormControl>
-                <FormMessage className="text-red-400 text-[10px]" />
+                <FormMessage className="text-[10px] text-red-400 font-sans font-medium px-2" />
               </FormItem>
             )}
           />
@@ -65,16 +72,21 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
             control={form.control}
             name="phone"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-900 font-bold uppercase tracking-wider text-[10px]">Phone Number</FormLabel>
+              <FormItem className="space-y-3">
+                <FormLabel className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 font-sans">
+                  Phone Number
+                </FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="06 XX XX XX XX 📱" 
-                    className="h-12 rounded-2xl border-gray-100 focus:border-gray-900 focus:ring-gray-100 bg-[#fafafa]/50 font-display"
-                    {...field} 
-                  />
+                  <div className="relative group">
+                    <Input 
+                      placeholder="+212 ..." 
+                      className="h-14 rounded-[20px] border-none bg-gray-50/50 px-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white font-sans"
+                      {...field} 
+                    />
+                    <div className="absolute inset-0 rounded-[20px] ring-1 ring-inset ring-gray-100 group-focus-within:ring-gray-200 pointer-events-none transition-all" />
+                  </div>
                 </FormControl>
-                <FormMessage className="text-red-400 text-[10px]" />
+                <FormMessage className="text-[10px] text-red-400 font-sans font-medium px-2" />
               </FormItem>
             )}
           />
@@ -83,40 +95,47 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
             control={form.control}
             name="note"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-900 font-bold uppercase tracking-wider text-[10px]">Special Note (Optional)</FormLabel>
+              <FormItem className="space-y-3">
+                <FormLabel className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 font-sans">
+                  Special Note
+                </FormLabel>
                 <FormControl>
-                  <Textarea 
-                    placeholder="A special message? ✨" 
-                    className="min-h-[80px] rounded-2xl border-gray-100 focus:border-gray-900 focus:ring-gray-100 bg-[#fafafa]/50 font-display"
-                    {...field} 
-                  />
+                  <div className="relative group">
+                    <Textarea 
+                      placeholder="Optional message..." 
+                      className="min-h-[80px] rounded-[24px] border-none bg-gray-50/50 p-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white resize-none font-sans"
+                      {...field} 
+                    />
+                    <div className="absolute inset-0 rounded-[24px] ring-1 ring-inset ring-gray-100 group-focus-within:ring-gray-200 pointer-events-none transition-all" />
+                  </div>
                 </FormControl>
-                <FormMessage className="text-red-400 text-[10px]" />
+                <FormMessage className="text-[10px] text-red-400 font-sans font-medium px-2" />
               </FormItem>
             )}
           />
         </div>
 
         <motion.div
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.99 }}
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.98 }}
+          className="pt-2"
         >
           <Button 
             type="submit" 
             disabled={isPending}
-            className="w-full h-14 text-sm font-bold uppercase tracking-widest rounded-2xl bg-gray-900 hover:bg-black shadow-xl shadow-gray-200 transition-all border-0"
+            className="w-full h-16 text-xs font-bold uppercase tracking-[0.25em] rounded-[24px] bg-gray-900 hover:bg-black text-white shadow-2xl shadow-gray-200 transition-all border-0 relative overflow-hidden group"
           >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
             {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
-              </>
+              <div className="flex items-center gap-3">
+                <Loader2 className="h-4 w-4 animate-spin opacity-50" />
+                <span>Processing</span>
+              </div>
             ) : (
-              <>
-                <Sparkles className="mr-2 h-4 w-4" />
-                Complete Selection
-              </>
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-4 w-4 opacity-50" />
+                <span>Complete Order</span>
+              </div>
             )}
           </Button>
         </motion.div>
