@@ -24,7 +24,7 @@ export function CuteCat() {
       </AnimatePresence>
       
       <motion.img 
-        src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHYxcXNxd3B4Ynd4Ynd4Ynd4Ynd4Ynd4Ynd4Ynd4Ynd4Ynd4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/GeimqsH0TLDt4tScGw/giphy.gif"
+        src="https://i.pinimg.com/originals/cf/94/20/cf94204d9c184ff030c707026ce3deb4.gif"
         alt="Cute Cat"
         className="w-24 h-24 sm:w-32 sm:h-32 object-contain drop-shadow-lg cursor-pointer"
         whileHover={{ scale: 1.1, rotate: 5 }}
