@@ -13,15 +13,10 @@ FROM node:22-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-
-# Install ALL dependencies (including drizzle-kit)
 RUN npm ci
 
-COPY --from=builder /app/dist ./dist
-
-# Copy drizzle schema files
-COPY db ./db
-COPY drizzle.config.ts ./
+# Copy everything from builder (includes any drizzle files)
+COPY --from=builder /app .
 
 EXPOSE 5000
 ENV NODE_ENV=production
