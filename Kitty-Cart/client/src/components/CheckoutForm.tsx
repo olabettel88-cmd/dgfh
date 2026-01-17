@@ -46,23 +46,16 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
   }, [digits, form]);
 
   const handleDigitChange = (index: number, value: string) => {
-    const cleanValue = value.replace(/[^0-9]/g, "");
-    if (cleanValue === "") {
-      const newDigits = [...digits];
-      newDigits[index] = "";
-      setDigits(newDigits);
-      return;
-    }
+    const char = value.slice(-1).replace(/[^0-9]/g, "");
     
-    const char = cleanValue.charAt(cleanValue.length - 1);
     const newDigits = [...digits];
     newDigits[index] = char;
     setDigits(newDigits);
 
-    if (index < 8) {
+    if (char && index < 8) {
       setTimeout(() => {
         inputRefs.current[index + 1]?.focus();
-      }, 10);
+      }, 0);
     }
   };
 
@@ -70,6 +63,10 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
     if (e.key === "Backspace") {
       if (!digits[index] && index > 0) {
         inputRefs.current[index - 1]?.focus();
+      } else {
+        const newDigits = [...digits];
+        newDigits[index] = "";
+        setDigits(newDigits);
       }
     }
   };
