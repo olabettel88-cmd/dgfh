@@ -64,41 +64,35 @@ export default function AdminDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="grid md:grid-cols-2">
-                    <div className="p-8 border-r border-gray-50">
-                      <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-8 font-sans">Customer Information</h3>
-                      <div className="space-y-8">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="p-6 md:p-8 md:border-r border-b md:border-b-0 border-gray-50 flex-1">
+                      <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-6 font-sans">Customer Information</h3>
+                      <div className="space-y-6">
                         <div className="flex items-start gap-4">
-                          <MapPin className="w-5 h-5 text-gray-200 mt-1" />
+                          <MapPin className="w-5 h-5 text-gray-200 mt-1 shrink-0" />
                           <div>
                             <p className="text-[10px] font-bold text-gray-400 uppercase mb-1 font-sans">Delivery Address</p>
                             <p className="text-gray-600 text-sm leading-relaxed">{order.address}</p>
                           </div>
                         </div>
                         <div className="flex items-start gap-4">
-                          <Phone className="w-5 h-5 text-gray-200 mt-1" />
+                          <Phone className="w-5 h-5 text-gray-200 mt-1 shrink-0" />
                           <div>
                             <p className="text-[10px] font-bold text-gray-400 uppercase mb-1 font-sans">Contact Phone</p>
                             <p className="text-gray-600 text-sm">{order.phone}</p>
                           </div>
                         </div>
-                        {order.note && (
-                          <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
-                            <p className="text-[10px] font-bold text-gray-400 uppercase mb-2 font-sans">Special Note</p>
-                            <p className="text-gray-500 italic text-sm leading-relaxed">"{order.note}"</p>
-                          </div>
-                        )}
                       </div>
                     </div>
-                    <div className="p-8 bg-[#fafafa]/50">
-                      <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-8 font-sans">Items Details</h3>
-                      <div className="space-y-6">
+                    <div className="p-6 md:p-8 bg-[#fafafa]/50 flex-[1.5]">
+                      <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-6 font-sans">Items Details</h3>
+                      <div className="space-y-4">
                         {order.items.map((item: any, idx: number) => (
-                          <div key={idx} className="flex items-center gap-5 bg-white p-4 rounded-2xl shadow-sm border border-gray-50">
-                            <img src={item.image} className="w-20 h-20 rounded-xl object-cover" alt="" />
-                            <div className="flex-1">
-                              <p className="font-bold text-gray-900 font-display text-lg">{item.name}</p>
-                              <div className="flex items-center gap-2 mt-1">
+                          <div key={idx} className="flex items-center gap-4 bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-gray-50">
+                            <img src={item.image} className="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shrink-0" alt="" />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-bold text-gray-900 font-display text-base md:text-lg truncate">{item.name}</p>
+                              <div className="flex flex-wrap items-center gap-2 mt-1">
                                 <span className="text-[10px] uppercase tracking-wider text-gray-300 font-sans font-bold">{item.category}</span>
                                 {item.selectedColor && (
                                   <span className="px-2 py-0.5 bg-gray-50 rounded text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans border border-gray-100">
@@ -112,7 +106,7 @@ export default function AdminDashboard() {
                                 )}
                               </div>
                             </div>
-                            <p className="font-display font-bold text-gray-900">{item.price.toFixed(2)} DH</p>
+                            <p className="font-display font-bold text-gray-900 shrink-0 text-sm md:text-base">{item.price.toFixed(2)} DH</p>
                           </div>
                         ))}
                       </div>
