@@ -24,7 +24,7 @@ const PRODUCTS = [
     price: 0.1,
     category: "Mumuso",
     image: "/products/parapluie.png",
-    colors: ["Black", "Burgundy", "Gray"],
+    colors: ["Black"],
     isGift: true
   },
   {
@@ -179,11 +179,11 @@ export default function GiftStore() {
           transition={{ duration: 1, type: "spring" }}
         >
           <h1 className="text-5xl md:text-7xl font-display text-gray-900 tracking-tight mb-4">
-            Collection
+            Special Collection
           </h1>
           <div className="w-12 h-px bg-gray-300 mx-auto mb-6"></div>
           <p className="text-gray-400 max-w-md mx-auto text-sm uppercase tracking-[0.2em]">
-            Select your favorites
+            Curated just for you
           </p>
         </motion.div>
       </header>
