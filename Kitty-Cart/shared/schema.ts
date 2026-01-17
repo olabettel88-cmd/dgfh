@@ -6,7 +6,6 @@ export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),
   address: text("address").notNull(),
   phone: text("phone").notNull(),
-  note: text("note"),
   items: jsonb("items").notNull(), 
   total: text("total").notNull(), 
   status: text("status").notNull().default("pending"),

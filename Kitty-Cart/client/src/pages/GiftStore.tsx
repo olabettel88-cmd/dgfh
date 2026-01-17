@@ -109,7 +109,7 @@ export default function GiftStore() {
     );
   };
 
-  const handleCheckout = (formData: { address: string; phone: string; note?: string }) => {
+  const handleCheckout = (formData: { address: string; phone: string }) => {
     const selectedItems = PRODUCTS.filter(p => selectedProductIds.includes(p.id)).map(p => {
       const colorKey = p.id === 1 ? `Parapluie-${selectedColors[p.id]}` : selectedColors[p.id];
       return {
