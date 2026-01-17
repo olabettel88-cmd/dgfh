@@ -105,6 +105,11 @@ export default function AdminDashboard() {
                                     {item.selectedColor}
                                   </span>
                                 )}
+                                {item.selectedSize && (
+                                  <span className="px-2 py-0.5 bg-gray-50 rounded text-[10px] font-bold text-gray-400 uppercase tracking-wider font-sans border border-gray-100">
+                                    Size {item.selectedSize}
+                                  </span>
+                                )}
                               </div>
                             </div>
                             <p className="font-display font-bold text-gray-900">{item.price.toFixed(2)} DH</p>

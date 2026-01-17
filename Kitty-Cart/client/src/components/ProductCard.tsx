@@ -17,10 +17,23 @@ interface ProductCardProps {
   onToggle: () => void;
   selectedColor?: string;
   onColorChange?: (color: string) => void;
+  selectedSize?: string;
+  onSizeChange?: (size: string) => void;
   isLocked?: boolean;
 }
 
-export function ProductCard({ product, isSelected, onToggle, selectedColor, onColorChange, isLocked }: ProductCardProps) {
+const SIZES = ["XS", "S", "M", "L", "XL"];
+
+export function ProductCard({ 
+  product, 
+  isSelected, 
+  onToggle, 
+  selectedColor, 
+  onColorChange,
+  selectedSize,
+  onSizeChange,
+  isLocked 
+}: ProductCardProps) {
   return (
     <motion.div 
       whileHover={!isLocked ? { y: -8 } : {}}
@@ -83,6 +96,29 @@ export function ProductCard({ product, isSelected, onToggle, selectedColor, onCo
                 {color}
               </button>
             ))}
+          </div>
+        )}
+
+        {/* Size Selection */}
+        {!isLocked && (
+          <div className="mb-6">
+            <p className="text-[9px] font-bold uppercase tracking-widest text-gray-300 mb-3">Taille</p>
+            <div className="flex justify-center gap-2">
+              {SIZES.map(size => (
+                <button
+                  key={size}
+                  onClick={() => onSizeChange?.(size)}
+                  className={cn(
+                    "w-8 h-8 rounded-lg border text-[10px] font-bold transition-all",
+                    selectedSize === size
+                      ? "bg-gray-900 text-white border-gray-900"
+                      : "bg-white text-gray-400 border-gray-100 hover:border-gray-300"
+                  )}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

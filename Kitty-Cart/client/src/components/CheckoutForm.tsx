@@ -39,7 +39,7 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="h-full flex flex-col justify-between py-2">
         <div className="space-y-6">
           <FormField
             control={form.control}
@@ -53,7 +53,7 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
                   <div className="relative group">
                     <Textarea 
                       placeholder="Street, City, Zip..." 
-                      className="min-h-[100px] rounded-[24px] border-none bg-gray-50/50 p-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white resize-none font-display font-medium"
+                      className="min-h-[80px] rounded-[24px] border-none bg-gray-50/50 p-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white resize-none font-display font-medium"
                       {...field} 
                     />
                     <div className="absolute inset-0 rounded-[24px] ring-1 ring-inset ring-gray-100 group-focus-within:ring-gray-200 pointer-events-none transition-all" />
@@ -74,7 +74,7 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
                 </FormLabel>
                 <FormControl>
                   <div className="flex items-center gap-2">
-                    <div className="h-14 px-4 flex items-center justify-center bg-gray-50 rounded-[20px] text-sm font-bold text-gray-900 border border-gray-100 shadow-sm">
+                    <div className="h-12 px-4 flex items-center justify-center bg-gray-50 rounded-[20px] text-xs font-bold text-gray-900 border border-gray-100 shadow-sm">
                       +212
                     </div>
                     <div className="relative group flex-1">
@@ -82,7 +82,7 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
                         type="tel"
                         inputMode="tel"
                         placeholder="6 00 00 00 00"
-                        className="h-14 rounded-[20px] border-none bg-gray-50/50 px-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white font-sans font-bold tracking-widest"
+                        className="h-12 rounded-[20px] border-none bg-gray-50/50 px-6 text-sm transition-all focus-visible:ring-1 focus-visible:ring-gray-200 focus-visible:bg-white font-sans font-bold tracking-widest"
                         {...field}
                       />
                       <div className="absolute inset-0 rounded-[20px] ring-1 ring-inset ring-gray-100 group-focus-within:ring-gray-200 pointer-events-none transition-all" />
@@ -98,7 +98,7 @@ export function CheckoutForm({ onSubmit, isPending }: CheckoutFormProps) {
         <motion.div
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
-          className="pt-2"
+          className="mt-6"
         >
           <Button 
             type="submit" 

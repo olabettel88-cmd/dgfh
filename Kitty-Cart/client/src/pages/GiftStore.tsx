@@ -89,6 +89,12 @@ export default function GiftStore() {
     4: "Black",
     5: "Brown/White",
   });
+  const [selectedSizes, setSelectedSizes] = useState<Record<number, string>>({
+    2: "S",
+    3: "S",
+    4: "S",
+    5: "S",
+  });
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   
@@ -97,6 +103,10 @@ export default function GiftStore() {
 
   const handleColorChange = (productId: number, color: string) => {
     setSelectedColors(prev => ({ ...prev, [productId]: color }));
+  };
+
+  const handleSizeChange = (productId: number, size: string) => {
+    setSelectedSizes(prev => ({ ...prev, [productId]: size }));
   };
 
   // Handlers
@@ -115,6 +125,7 @@ export default function GiftStore() {
       return {
         ...p,
         selectedColor: selectedColors[p.id],
+        selectedSize: selectedSizes[p.id],
         image: COLOR_MAP[colorKey] || p.image
       };
     });
@@ -209,6 +220,8 @@ export default function GiftStore() {
                 onToggle={() => toggleProduct(product.id)}
                 selectedColor={selectedColors[product.id]}
                 onColorChange={(color) => handleColorChange(product.id, color)}
+                selectedSize={selectedSizes[product.id]}
+                onSizeChange={(size) => handleSizeChange(product.id, size)}
                 isLocked={product.id === 1}
               />
             </motion.div>
@@ -246,7 +259,7 @@ export default function GiftStore() {
 
       {/* Checkout Modal */}
       <Dialog open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen}>
-        <DialogContent className="w-[95%] sm:max-w-md bg-white border-gray-100 p-0 overflow-hidden max-h-[85vh] flex flex-col rounded-[2rem]">
+        <DialogContent className="w-[95%] sm:max-w-md bg-white border-gray-100 p-0 overflow-hidden rounded-[2rem] h-[600px] flex flex-col translate-y-[-50%] top-[50%]">
           <div className="bg-gray-50 p-5 md:p-8 text-center border-b border-gray-100 shrink-0">
             <DialogTitle className="text-xl md:text-2xl font-display text-gray-900">Delivery Details</DialogTitle>
             <DialogDescription className="text-gray-400 mt-2 text-xs md:text-sm px-4">
@@ -254,7 +267,7 @@ export default function GiftStore() {
             </DialogDescription>
           </div>
           
-          <div className="p-5 md:p-8 overflow-y-auto custom-scrollbar flex-1">
+          <div className="p-8 flex-1 overflow-hidden">
             <CheckoutForm onSubmit={handleCheckout} isPending={isPending} />
           </div>
         </DialogContent>
