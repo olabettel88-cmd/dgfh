@@ -16,6 +16,7 @@ COPY --from=builder /app/server ./server
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder /app/shared ./shared
 
-EXPOSE 5000
 ENV NODE_ENV=production
-CMD ["sh", "-c", "npm run db:push && node dist/index.cjs"]
+
+# Simple single-line command
+CMD ["sh", "-c", "npm run db:push && echo '=== Starting server ===' && node dist/index.cjs"]
