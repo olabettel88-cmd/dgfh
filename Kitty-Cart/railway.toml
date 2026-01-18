@@ -1,5 +1,12 @@
 [build]
-builder = "DOCKERFILE"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "npm run db:push && node dist/index.cjs"
+startCommand = "node dist/index.cjs"
+```
+
+### Option 3: Clear it in Railway UI
+In that same Settings page, **delete the text** in the "Custom Start Command" field, or change it to just:
+```
+node dist/index.cjs
